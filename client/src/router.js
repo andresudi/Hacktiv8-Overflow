@@ -6,20 +6,32 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      children: [
+        { path: '/register', component: () => import('./components/Register.vue') },
+        { path: '/login', component: () => import('./components/Login.vue') }
+      ]
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path: '/question',
+      name: 'Question',
+      component: () => import('./views/Questions.vue')
+    },
+    {
+      path: '/forum',
+      name: 'forum',
+      component: () => import('./views/Forum.vue'),
+      children: [
+        { path: '', component: () => import('./components/Question.vue') },
+        { path: '', component: () => import('./components/AddQuestion.vue') },
+        { path: '/forum/question/:id', component: () => import('./components/DetailQuestion.vue') },
+        { path: '/forum/question/update/:id', component: () => import('./components/EditQuestion.vue') },
+        { path: '/forum/answer/:id', component: () => import('./components/UpdateAnswer.vue') }
+      ]
     }
   ]
 })
