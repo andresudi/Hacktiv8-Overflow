@@ -14,15 +14,6 @@ export default {
       AddQuestion,
       MyQuestion
     },
-    methods: {
-      upvote() {
-
-      },
-
-      downvote() {
-
-      }
-    }
 }
 </script>
 

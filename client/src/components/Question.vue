@@ -21,14 +21,14 @@
                     </v-card-title>
                     <hr>
                     <v-card-actions>
-                        <v-btn flat icon color="blue lighten-2">
-                            <v-icon>thumb_up</v-icon> 
+                        <v-btn flat icon color="blue lighten-2" @click="likeQuestion(data._id)">
+                            <v-icon>thumb_up</v-icon>
                         </v-btn>
                         <p style="margin-left: 5px;">Upvote {{ data.likes.length }}</p>
-                        <v-btn flat icon color="red lighten-2" style="margin-left: 20px;">
+                        <v-btn flat icon color="red lighten-2" style="margin-left: 20px;" @click="dislikeQuestion(data._id)">
                             <v-icon>thumb_down</v-icon>
                         </v-btn>
-                        <p style="margin-left: 5px;">Downvote {{ data.likes.length }}</p>
+                        <p style="margin-left: 5px;">Downvote {{ data.dislikes.length }}</p>
                         <router-link :to="`/forum/question/${data._id}`">
                             <v-btn style="margin-left: 260px; color: white;" flat class="indigo darken-3">Show Detail</v-btn>
                         </router-link>
@@ -45,26 +45,79 @@
         mapActions,
         mapState
     } from "vuex";
+    import axios from 'axios'
+    import swal from 'sweetalert'
     export default {
-    
+        data() {
+            return {
+                resultLike: '',
+                resultDislike: ''
+            }
+        },
         computed: {
             ...mapState({
-                question_list: 'question_list'
+                question_list: 'question_list',
+                baseUrl: 'baseUrl'
             })
         },
         methods: {
             ...mapActions([
                 'getAllQuestion',
-            ])
+            ]),
+    
+            likeQuestion(id) {
+                axios({
+                        method: 'put',
+                        url: `${this.baseUrl}/questions/like/${id}`,
+                        headers: {
+                            token: localStorage.getItem('token')
+                        }
+                    })
+                    .then((result) => {
+                        console.log('LIKEEE=====>', result.data);
+                        this.resultLike = result
+                    })
+                    .catch((err) => {
+                        console.log('ERRRR===>', err.response);
+                        swal(err.response.data.message, '', 'error')
+                    })
+            },
+    
+            dislikeQuestion(id) {
+                axios({
+                        method: 'put',
+                        url: `${this.baseUrl}/questions/dislike/${id}`,
+                        headers: {
+                            token: localStorage.getItem('token')
+                        }
+                    })
+                    .then((result) => {
+                        console.log('DISS=====>', result.data.data);
+                        this.resultDislike = result
+                    })
+                    .catch((err) => {
+                        console.log(err.response);
+                        swal(err.response.data.message, '', 'error')
+                    })
+            }
         },
         created() {
             this.getAllQuestion()
+        },
+
+        watch: {
+            resultLike() {
+                this.getAllQuestion()
+            },
+
+            resultDislike() {
+                this.getAllQuestion()
+            }
         }
     }
 </script>
 
 <style scoped>
-
     .tes {
         margin-bottom: 50px;
         color: black;
