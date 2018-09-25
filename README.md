@@ -1,5 +1,6 @@
 # Hacktiv8-Overflow
 
+<<<<<<< HEAD
 ## User Route
 
 | Route           | Method | Description          | Attributes        |
@@ -31,3 +32,4 @@
 | /answers/:id         | PUT    | Update one answer               | id answer, token           |
 | /answers/like/:id    | PUT    | Like one answer                 | id answer, token           |
 | /answers/dislike/:id | PUT    | Dislike one answer              | id answer, token           |
+
