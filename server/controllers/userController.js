@@ -46,7 +46,7 @@ const register = (req, res) => {
           })
           .catch(err => {
             res.status(400).json({
-              message: "Please input correctly"
+              message: "Please input all fields correctly"
             });
           });
       } else {

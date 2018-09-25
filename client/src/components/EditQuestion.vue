@@ -1,6 +1,5 @@
 <template>
     <v-container>
-        <v-jumbotron class="jumbo">
             <v-container fill-height>
             <v-layout align-center>
                 <v-flex>
@@ -15,13 +14,12 @@
                     Submit
                 </v-btn>
 
-                <v-btn class="mx-0" color="red" to="/question">
+                <v-btn style="margin-left: 5px;" color="red" to="/question">
                     Back
                 </v-btn>
                 </v-flex>
             </v-layout>
             </v-container>
-        </v-jumbotron>
     </v-container>
 </template>
 

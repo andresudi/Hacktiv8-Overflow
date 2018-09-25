@@ -1,27 +1,29 @@
 <template>
     <v-container>
-        <v-jumbotron class="jumbo">
             <v-container fill-height>
             <v-layout align-center>
                 <v-flex>
                 <h3 class="display-1">Add Your Question</h3>
                 <br>
-                
                 <v-text-field label="please type here..." v-model="title"></v-text-field>
                 <br>
                 <wysiwyg v-model="description"/>
-                <v-btn class="mx-0" color="blue" @click="addQuestion">
+                <v-btn class="mx-0 indigo darken-3" style="color: white;" @click="addQuestion">
                     Submit
                 </v-btn>
                 </v-flex>
             </v-layout>  
             </v-container>
-        </v-jumbotron>
+           <div>
+            <v-alert v-if="notif" :value="true" type="success" class="green accent-4">
+                <h4 class="text-md-center">{{notif}}</h4>
+            </v-alert>
+        </div>
     </v-container>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
     data () {
         return {
@@ -44,6 +46,12 @@ export default {
             this.description = ''
             this.createQuestion(obj)
         }
+    },
+    
+    computed: {
+        ...mapState({
+           notif: 'notif'
+        })
     }
 }
 </script>

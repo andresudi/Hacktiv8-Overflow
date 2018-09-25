@@ -3,19 +3,34 @@
         <h1>All Questions</h1>
         <br>
         <v-layout align-start justify-start row fill-height wrap>
-            <v-flex xs12 sm6 v-for="(data,i) in question_list" v-bind:key="i" class="tes">
-                <v-card class="ho">
+            <v-flex xs12 sm12 v-for="(data,i) in question_list" v-bind:key="i" class="tes">
+                <v-card class="hoho">
                     <v-card-title primary-title>
                         <div class="kontent">
-                            <h3 class="headline mb-0"> {{ data.title }} </h3>
+                            <h2 class="headline mb-0"><strong>{{ data.title }}</strong></h2>
                             <hr>
-                            <div> {{ data.description }} </div>
+                            <br>
+                            <div v-if="data.userId.name">
+                                <p class="margin-left: 500px;"> Posted on {{ data.createdAt | moment("dddd, MMMM Do YYYY, h:mm a")}} by {{ data.userId.name }}</p>
+                            </div>
+                            <div v-else>
+                                <p class="margin-left: 500px;"> Posted on {{ data.createdAt | moment("dddd, MMMM Do YYYY, h:mm a")}} by Anonymous</p>
+                            </div>
+                            <h4 v-html="data.description"> {{ data.description }} </h4>
                         </div>
                     </v-card-title>
-    
+                    <hr>
                     <v-card-actions>
+                        <v-btn flat icon color="blue lighten-2">
+                            <v-icon>thumb_up</v-icon> 
+                        </v-btn>
+                        <p style="margin-left: 5px;">Upvote {{ data.likes.length }}</p>
+                        <v-btn flat icon color="red lighten-2" style="margin-left: 20px;">
+                            <v-icon>thumb_down</v-icon>
+                        </v-btn>
+                        <p style="margin-left: 5px;">Downvote {{ data.likes.length }}</p>
                         <router-link :to="`/forum/question/${data._id}`">
-                            <v-btn flat color="blue">Show Detail</v-btn>
+                            <v-btn style="margin-left: 260px; color: white;" flat class="indigo darken-3">Show Detail</v-btn>
                         </router-link>
                     </v-card-actions>
     
@@ -39,7 +54,7 @@
         },
         methods: {
             ...mapActions([
-                'getAllQuestion'
+                'getAllQuestion',
             ])
         },
         created() {
@@ -49,6 +64,7 @@
 </script>
 
 <style scoped>
+
     .tes {
         margin-bottom: 50px;
         color: black;
@@ -63,7 +79,7 @@
         color: black;
     }
     
-    .ho {
+    .hoho {
         background-color: gainsboro;
         position: center;
         text-align: center;

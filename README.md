@@ -1,6 +1,5 @@
 # Hacktiv8-Overflow
 
-<<<<<<< HEAD
 ## User Route
 
 | Route           | Method | Description          | Attributes        |

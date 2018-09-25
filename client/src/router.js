@@ -12,6 +12,7 @@ export default new Router({
       name: 'home',
       component: Home,
       children: [
+        { path: '/', component: () => import('./components/LandingPage.vue')},
         { path: '/register', component: () => import('./components/Register.vue') },
         { path: '/login', component: () => import('./components/Login.vue') }
       ]
@@ -26,8 +27,8 @@ export default new Router({
       name: 'forum',
       component: () => import('./views/Forum.vue'),
       children: [
-        { path: '', component: () => import('./components/Question.vue') },
-        { path: '', component: () => import('./components/AddQuestion.vue') },
+        { path: '/forum', component: () => import('./components/Question.vue') },
+        { path: '/forum', component: () => import('./components/AddQuestion.vue') },
         { path: '/forum/question/:id', component: () => import('./components/DetailQuestion.vue') },
         { path: '/forum/question/update/:id', component: () => import('./components/EditQuestion.vue') },
         { path: '/forum/answer/:id', component: () => import('./components/UpdateAnswer.vue') }

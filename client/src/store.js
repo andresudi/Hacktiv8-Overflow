@@ -15,10 +15,21 @@ export default new Vuex.Store({
     answer: '',
     token: '',
     user_login: '',
-    created: ''
+    created: '',
+    baseUrl: 'http://localhost:3000',
+    errorMessage : '',
+    notif: ''
   },
 
   mutations: {
+    setNotif (state, payload) {
+      state.notif = payload
+    },
+
+    setErrorMessage (state, payload) {
+      state.errorMessage = payload
+    },
+
     setQuestionList (state, payload) {
       state.question_list = payload
     },
@@ -60,7 +71,7 @@ export default new Vuex.Store({
     register (context,data) {
       axios({
         method: 'post',
-        url: `http://35.240.190.67/users/register`,
+        url: `${this.state.baseUrl}/users/register`,
         data: {
           name: data.name,
           email: data.email,
@@ -74,18 +85,18 @@ export default new Vuex.Store({
           })
           router.push('/login')
         })
-        .catch((err) => {
-          swal({
-            type: 'error',
-            title: err.message,
-          })
+        .catch((err) => {    
+          context.commit('setErrorMessage', err.response.data.message)
+          setInterval(function () {
+            context.commit('setErrorMessage', '')
+          }, 3000)
         });
     },
 
     login (context,data) {
       axios({
         method: 'post',
-        url: 'http://35.240.190.67/users/login',
+        url: `${this.state.baseUrl}/users/login`,
         data: {
           email: data.email,
           password: data.password
@@ -94,18 +105,22 @@ export default new Vuex.Store({
         .then((result) => {
           swal(result.data.message, '', 'success')
           localStorage.setItem('token', result.data.token)
+          localStorage.setItem('name', result.data.name)
           context.commit('setToken', localStorage.getItem('token'))
           context.commit('setUserLogin',result.data.email)
           router.push('/')
         })
         .catch((err) => {
-          swal(err.message)
+          console.log(err.response.data.message);
+          context.commit('setErrorMessage', err.response.data.message)
+          setInterval(function () {
+            context.commit('setErrorMessage', '')
+          }, 3000)
         });
     },
 
     logout(context,data) {
       localStorage.removeItem('token')
-      swal('Good Bye', '', 'success')
       context.commit('setToken', '')
       router.push('/')
     },
@@ -113,7 +128,7 @@ export default new Vuex.Store({
     getAllQuestion (context,data) {
       axios({
         method: 'get',
-        url: 'http://35.240.190.67/questions'
+        url: `${this.state.baseUrl}/questions`
       })
         .then((response) => {
           context.commit('setQuestionList', response.data.data)
@@ -126,7 +141,7 @@ export default new Vuex.Store({
     getMyQuestion (context, data) {
       axios({
         method: 'get',
-        url: 'http://35.240.190.67/questions/me',
+        url: `${this.state.baseUrl}/questions/me`,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -138,10 +153,10 @@ export default new Vuex.Store({
       });
     },
 
-    getOneQuestion (context,data) {
+    getOneQuestion (context, data) {
       axios({
         method: 'get',
-        url: `http://35.240.190.67/questions/${data}`
+        url: `${this.state.baseUrl}/questions/${data}`
       })
         .then((result) => {
           context.commit('setTitle', result.data.data.title)
@@ -157,7 +172,7 @@ export default new Vuex.Store({
     createQuestion (context, data) {
       axios({
         method: 'post',
-        url: `http://35.240.190.67/questions`,
+        url: `${this.state.baseUrl}/questions`,
         headers: {
           token: localStorage.getItem('token')
         },
@@ -167,7 +182,10 @@ export default new Vuex.Store({
         }
       })
         .then((result) => {
-          swal(result.data.message, '', 'success')
+          context.commit('setNotif', result.data.message)
+          setInterval(function () {
+            context.commit('setNotif', '')
+          }, 5000)
           router.push('/question')
         })
         .catch((err) => {
@@ -178,23 +196,23 @@ export default new Vuex.Store({
     deleteQuestion (context, data) {
       axios({
         method: 'delete',
-        url: `http://35.240.190.67/questions/${data}`,
+        url: `${this.state.baseUrl}/questions/${data}`,
         headers: {
           token: localStorage.getItem('token')
         }
       })
         .then((result) => {
-          swal(result.data.message, '', 'success')
+          console.log(result);
         })
         .catch((err) => {
-          
+          console.log(err);
         });
     },
 
     updateQuestion (context,data) {
       axios({
         method: 'put',
-        url: `http://35.240.190.67/questions/${data.id}`,
+        url: `${this.state.baseUrl}/questions/${data.id}`,
         headers: {
           token: localStorage.getItem('token')
         },
@@ -204,9 +222,7 @@ export default new Vuex.Store({
         }
       })
         .then((result) => {
-          swal(result.data.message, '', 'success');
           router.push('/question')
-          
         })
         .catch((err) => {
           
@@ -216,7 +232,7 @@ export default new Vuex.Store({
     createAnswer (context, data) {
       axios({
         method: 'post',
-        url: `http://35.240.190.67/answers`,
+        url: `${this.state.baseUrl}/answers`,
         headers: {
           token: localStorage.getItem('token')
         },
@@ -226,7 +242,7 @@ export default new Vuex.Store({
         }
       })
         .then((result) => {
-          swal(result.data.message, '', 'success')
+          console.log(result);
         })
         .catch((err) => {
           
@@ -236,7 +252,7 @@ export default new Vuex.Store({
     getAllAnswer (context, data) {
       axios({
         method: 'get',
-        url: `http://35.240.190.67/answers/${data}`,
+        url: `${this.state.baseUrl}/answers/${data}`,
       })
         .then((result) => {
           context.commit('setAnswer', result.data.data)
@@ -248,7 +264,7 @@ export default new Vuex.Store({
 
     sendEmail (context) {
       let token = localStorage.getItem('token')
-      axios.post(baseUrl + '/users/sendmail', {
+      axios.post(`${this.state.baseUrl}/users/sendmail`, {
         email: this.state.newUser.email,
         name: this.state.newUser.name
       }, {

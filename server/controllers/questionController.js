@@ -28,6 +28,7 @@ const getAllQuestion = (req, res) => {
   Question.find({})
     .populate("userId")
     .populate("answerId")
+    .sort({createdAt: 'desc'})
     .then(data_questions => {
       res.status(200).json({
         message: `Success get all questions list`,

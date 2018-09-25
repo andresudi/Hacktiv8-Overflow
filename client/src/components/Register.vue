@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-card class="kartu">
+        <v-card class="kartu blue-grey lighten-4">
             <h1>Register Form</h1>
             <v-form v-model="valid">
                 <v-text-field v-model="name" type="text" label="Name" required></v-text-field>
@@ -12,12 +12,19 @@
                 <v-btn color="blue" @click="registerUser">submit</v-btn>
             </v-form>
         </v-card>
+        <br>
+        <div>
+            <v-alert v-if="errorMessage" :value="true" type="error" class="red darken-2">
+                <h4 class="text-md-center">{{errorMessage}}</h4>
+            </v-alert>
+        </div>
     </v-container>
 </template>
 
 <script>
     import {
-        mapActions
+        mapActions,
+        mapState
     } from "vuex";
     export default {
         data() {
@@ -49,6 +56,11 @@
                 }
                 this.register(obj)
             }
+        },
+        computed: {
+            ...mapState({
+                errorMessage: 'errorMessage'
+            })
         }
     }
 </script>

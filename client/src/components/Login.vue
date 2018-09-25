@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-card class="kartu">
+        <v-card class="kartu blue-grey lighten-4">
             <h1>Login Form</h1>
             <v-form v-model="valid">
                 <v-text-field v-model="email" type="email" :rules="emailRules" label="E-mail" required></v-text-field>
@@ -11,6 +11,13 @@
                 <v-btn color="blue" @click="loginUser">Submit</v-btn>
             </v-form>
         </v-card>
+        <br>
+        <div>
+            <v-alert v-if="errorMessage" :value="true" type="error" class="red darken-2">
+                <h4 class="text-md-center">{{errorMessage}}</h4>
+            </v-alert>
+        </div>
+    
     </v-container>
 </template>
 
@@ -20,7 +27,6 @@
         mapState
     } from "vuex";
     import axios from 'axios'
-    import swal from 'sweetalert'
     export default {
         data() {
             return {
@@ -37,6 +43,11 @@
                 ]
             }
         },
+        computed: {
+            ...mapState({
+                errorMessage: 'errorMessage' 
+            })
+        },
         methods: {
             ...mapActions([
                 'login'
@@ -48,53 +59,7 @@
                 }
                 this.login(obj)
             },
-            loginfb() {
-                this.checkLoginState()
-            },
-            checkLoginState() {
-                console.log('masuk');
-                FB.getLoginStatus(function(response) {
-                    console.log(response);
-                    if (response.status == 'connected') {
-                        console.log(response);
-                        axios.post('http://35.240.190.67/users/loginfb', response.authResponse)
-                            .then((data_fb) => {
-                                localStorage.setItem('token', data_fb.data.token)
-                                swal({
-                                    title: "Login Success!",
-                                    icon: "success",
-                                    button: "next",
-                                });
-                                this.$router.push('/')
-                            })
-                            .catch((err) => {
-                                swal(err.message)
-                            })
-                    }
-                });
-            }
         },
-    
-        created() {
-            window.fbAsyncInit = function() {
-                FB.init({
-                    appId: "1783427051770530",
-                    cookie: true,
-                    xfbml: true,
-                    version: "v2.8"
-                });
-            };
-            (function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) {
-                    return;
-                }
-                js = d.createElement(s);
-                js.id = id;
-                js.src = "https://connect.facebook.net/en_US/sdk.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-        }
     }
 </script>
 
@@ -104,6 +69,6 @@
         margin-right: auto;
         border-radius: 20px;
         padding: 10px;
-        background-color: bisque
     }
+    
 </style>

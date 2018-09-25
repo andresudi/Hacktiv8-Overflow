@@ -34,7 +34,7 @@
 <script>
 import axios from 'axios'
 import { mapState, mapActions } from "vuex";
-// import Answer from '@/components/Answer.vue';
+import Answer from '@/components/Answer.vue';
 import swal from 'sweetalert';
 export default {
     components: {
@@ -50,7 +50,8 @@ export default {
         ...mapState({
             question: 'question',
             answer: 'answer',
-            token: 'token'
+            token: 'token',
+            baseUrl: 'baseUrl'
         })
     },
     methods: {
@@ -70,7 +71,7 @@ export default {
         likeQuestion (id) {
             axios({
                 method: 'put',
-                url: `http://35.240.190.67/questions/like/${id}`,
+                url: `${this.state.baseUrl}/questions/like/${id}`,
                 headers: {
                     token: localStorage.getItem('token')
                 }
@@ -86,7 +87,7 @@ export default {
         dislikeQuestion (id) {
             axios({
                 method: 'put',
-                url: `http://35.240.190.67/questions/dislike/${id}`,
+                url: `${this.state.baseUrl}/questions/dislike/${id}`,
                 headers: {
                     token: localStorage.getItem('token')
                 }
