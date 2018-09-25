@@ -33,7 +33,7 @@ export default {
         updateAnswer () {
             axios({
                 method: 'put',
-                url: `http://localhost:3000/answers/${this.$route.params.id}`,
+                url: `http://35.240.190.67/answers/${this.$route.params.id}`,
                 headers: {
                     token: localStorage.getItem('token')
                 },
@@ -53,7 +53,7 @@ export default {
     mounted () {
         axios({
         method: 'get',
-        url: `http://localhost:3000/answers/one/${this.$route.params.id}`,
+        url: `http://35.240.190.67/answers/one/${this.$route.params.id}`,
         headers: {
             token: localStorage.getItem('token')
         }

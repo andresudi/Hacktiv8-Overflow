@@ -57,7 +57,7 @@
                     console.log(response);
                     if (response.status == 'connected') {
                         console.log(response);
-                        axios.post('http://localhost:3000/users/loginfb', response.authResponse)
+                        axios.post('http://35.240.190.67/users/loginfb', response.authResponse)
                             .then((data_fb) => {
                                 localStorage.setItem('token', data_fb.data.token)
                                 swal({

@@ -1,124 +1,182 @@
-const User = require('../models/user')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-require('dotenv').config()
+const User = require("../models/user");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
-const register = (req,res) => {
-    const { name,email,password } = req.body
-    User.findOne({
-        email: email
-    })
-        .then((data_user) => {
-            if (data_user) {
-                res.status(200).json({
-                    message: `Email is Already Exist`,
-                })
-            }
-            else {
-                User.create({
-                    name: name,
-                    email: email,
-                    password: password
-                })
-                    .then((new_user) => {
-                        res.status(201).json({
-                            message: `Register Success!`,
-                            data: new_user
-                        })
-                    })
-                    .catch((err) => {
-                        res.status(400).json({
-                            message: `Password must greater than 5!`
-                        })
-                    });
-            }
-        })
-        .catch((err) => {
-            res.status(400).json({
-                message: `Internal Server Error`
-            })
+const getAllUser = (req, res) => {
+  User.find({})
+    .then(data => {
+      if (data.length == 0) {
+        res.status(400).json({
+          message: `Cannot get users data`,
+          data
         });
-}
-
-const login = (req,res) => {
-    const { email,password } = req.body
-    User.findOne({
-        email: email
-    })
-        .then((data_user) => {
-            if (data_user) {
-                let check_pass = bcrypt.compareSync(password, data_user.password);
-                if (check_pass) {
-                    let token = jwt.sign( { id: data_user._id, name: data_user.name, email: data_user.email}, process.env.jwt_secret)
-                    res.status(200).json({
-                        message: `Login Success!`,
-                        token,
-                        email: data_user.email
-                    })
-                }
-                else {
-                    res.status(200).json({
-                        message: `Password Wrong!`
-                    })
-                }
-            }
-            else {
-                res.status(200).json({
-                    message: `User Not Registered!`
-                })
-            }
-        })
-        .catch((err) => {
-            res.status(400).json({
-                message: `Internal Server Error`
-            })
+      } else {
+        res.status(200).json({
+          message: `Succes get all users`,
+          data
         });
-}
+      }
+    })
+    .catch(err => {
+      res.status(400).json({
+        message: `Something is wrong`,
+        err
+      });
+    });
+};
 
-const loginfb = (req,res) => {c
-    let url_user_info = `https://graph.facebook.com/me?fields=id,name,email&access_token=${req.body.accessToken}`
-    axios.get(url_user_info)
-    .then((data_userFB) => {
-        User.findOne({
-            email: data_userFB.data.email
+const register = (req, res) => {
+  const { name, email, password } = req.body;
+  User.findOne({
+    email: email
+  })
+    .then(user => {
+      if (!user || user == undefined) {
+        User.create({
+          name: name,
+          email: email,
+          password: password
         })
-            .then((data_user) => { 
-                if (data_user == null) {
-                    User.create({
-                        name: data_userFB.data.name,
-                        email: data_userFB.data.email,
-                        password: data_userFB.data.id
-                    })
-                    .then((new_user) => {
-                        let token = jwt.sign( { id: new_user._id, email: new_user.email }, process.env.jwt_secret)
-                        res.status(201).json({
-                            message: `successfully registered`,
-                            token
-                        })
-                    })
-                    .catch((err) => {
-                        res.status(400).json({
-                            message: err.message
-                        })
-                    })
-                }else {
-                    let token = jwt.sign( { id: data_user._id, email: data_user.email }, process.env.jwt_secret)
-                    res.status(200).json({
-                        message: `login successfully`,
-                        token
-                    })
-                }
+          .then(data => {
+            res.status(200).json({
+              message: `Success add new user`,
+              data
+            });
+          })
+          .catch(err => {
+            res.status(400).json({
+              message: "Please input correctly"
+            });
+          });
+      } else {
+        res.status(400).json({
+          message: "Email is already exist"
+        });
+      }
+    })
+    .catch(err => {
+      res.status(400).json({
+        message: err.message
+      });
+    });
+};
+
+const login = (req, res) => {
+  const { email, password } = req.body;
+  User.findOne({
+    email: email
+  })
+    .then(data => {
+      if (data) {
+        let passwordCheck = bcrypt.compareSync(password, data.password);
+        if (passwordCheck) {
+          let token = jwt.sign(
+            {
+              id: data._id,
+              name: data.name,
+              email: data.email
+            },
+            process.env.jwt_secret
+          );
+          res.status(200).json({
+            message: `Successfully login`,
+            token: token,
+            token2: token + ',' + data._id,
+            name: data.name
+          });
+        } else {
+          res.status(400).json({
+            message: `Password is invalid`
+          });
+        }
+      } else {
+        res.status(400).json({
+          message: `Email not found`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(400).json({
+        message: err.message
+      });
+    });
+};
+
+const loginfb = (req, res) => {
+  let urlUser = `https://graph.facebook.com/me?fields=id,name,email&access_token=${
+    req.body.token
+  }`;
+
+  axios
+    .get(urlUser)
+    .then(data => {
+      User.findOne({
+        email: data.data.email
+      })
+        .then(dataUser => {
+          if (dataUser == null) {
+            User.create({
+              name: data.data.name,
+              email: data.data.email,
+              password: data.data.email
             })
-            .catch((err) => {
+              .then(newUser => {
+                let token = jwt.sign(
+                  {
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email
+                  },
+                  process.env.jwt_secret
+                );
+
+                res.status(200).json({
+                  message: `succesfully registered`,
+                  token: token,
+                  name: newUser.name,
+                  email: newUser.email
+                });
+              })
+              .catch(err => {
                 res.status(400).json({
-                    message: err.message
-                })
-            })
+                  message: err.message
+                });
+              });
+          } else {
+            let token = jwt.sign(
+              {
+                id: dataUser.id,
+                name: dataUser.name,
+                email: dataUser.email
+              },
+              process.env.jwt_secret
+            );
+
+            res.status(200).json({
+              message: `login succesfully`,
+              token: token,
+              name: dataUser.name,
+              email: dataUser.email
+            });
+          }
+        })
+        .catch(err => {
+          res.status(400).json({
+            err
+          });
+        });
     })
-}
+    .catch(err => {
+      res.status(400).json({
+        err
+      });
+    });
+};
 
 module.exports = {
-    register,
-    login,
-    loginfb
-}
+  getAllUser,
+  register,
+  login,
+  loginfb
+};

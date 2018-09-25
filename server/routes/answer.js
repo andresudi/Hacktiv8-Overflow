@@ -2,17 +2,17 @@ const router = require('express').Router()
 const { isLogin } = require('../middlewares/isLogin')
 const { 
     createAnswer, 
-    getAllAnswer, 
+    getAllAnswerInQuestion, 
     getOneAnswer, 
     updateAnswer, 
     likeAnswer, 
     dislikeAnswer } = require('../controllers/answerController')
 
-router.post('/',isLogin, createAnswer)
-router.get('/:question', getAllAnswer)
+router.post('/:question', isLogin, createAnswer)
+router.get('/:question', getAllAnswerInQuestion)
 router.get('/one/:id', getOneAnswer)
-router.put('/:id', updateAnswer)
-router.put('/like/:id', likeAnswer)
-router.put('/dislike/:id', dislikeAnswer)
+router.put('/:id', isLogin, updateAnswer)
+router.put('/like/:id', isLogin, likeAnswer)
+router.put('/dislike/:id', isLogin, dislikeAnswer)
 
 module.exports = router

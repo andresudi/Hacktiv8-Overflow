@@ -50,7 +50,7 @@ export default {
         likeAnswer (id) {
             axios({
                 method: 'put',
-                url: `http://localhost:3000/answers/like/${id}`,
+                url: `http://35.240.190.67/answers/like/${id}`,
                 headers: {
                     token: localStorage.getItem('token')
                 }
@@ -65,7 +65,7 @@ export default {
         dislikeAnswer (id) {
             axios({
                 method: 'put',
-                url: `http://localhost:3000/answers/dislike/${id}`,
+                url: `http://35.240.190.67/answers/dislike/${id}`,
                 headers: {
                     token: localStorage.getItem('token')
                 }

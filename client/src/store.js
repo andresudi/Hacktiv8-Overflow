@@ -60,7 +60,7 @@ export default new Vuex.Store({
     register (context,data) {
       axios({
         method: 'post',
-        url: `http://localhost:3000/users/register`,
+        url: `http://35.240.190.67/users/register`,
         data: {
           name: data.name,
           email: data.email,
@@ -85,7 +85,7 @@ export default new Vuex.Store({
     login (context,data) {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/users/login',
+        url: 'http://35.240.190.67/users/login',
         data: {
           email: data.email,
           password: data.password
@@ -113,7 +113,7 @@ export default new Vuex.Store({
     getAllQuestion (context,data) {
       axios({
         method: 'get',
-        url: 'http://localhost:3000/questions'
+        url: 'http://35.240.190.67/questions'
       })
         .then((response) => {
           context.commit('setQuestionList', response.data.data)
@@ -126,7 +126,7 @@ export default new Vuex.Store({
     getMyQuestion (context, data) {
       axios({
         method: 'get',
-        url: 'http://localhost:3000/questions/me',
+        url: 'http://35.240.190.67/questions/me',
         headers: {
           token: localStorage.getItem('token')
         }
@@ -141,7 +141,7 @@ export default new Vuex.Store({
     getOneQuestion (context,data) {
       axios({
         method: 'get',
-        url: `http://localhost:3000/questions/${data}`
+        url: `http://35.240.190.67/questions/${data}`
       })
         .then((result) => {
           context.commit('setTitle', result.data.data.title)
@@ -157,7 +157,7 @@ export default new Vuex.Store({
     createQuestion (context, data) {
       axios({
         method: 'post',
-        url: `http://localhost:3000/questions`,
+        url: `http://35.240.190.67/questions`,
         headers: {
           token: localStorage.getItem('token')
         },
@@ -178,7 +178,7 @@ export default new Vuex.Store({
     deleteQuestion (context, data) {
       axios({
         method: 'delete',
-        url: `http://localhost:3000/questions/${data}`,
+        url: `http://35.240.190.67/questions/${data}`,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -194,7 +194,7 @@ export default new Vuex.Store({
     updateQuestion (context,data) {
       axios({
         method: 'put',
-        url: `http://localhost:3000/questions/${data.id}`,
+        url: `http://35.240.190.67/questions/${data.id}`,
         headers: {
           token: localStorage.getItem('token')
         },
@@ -216,7 +216,7 @@ export default new Vuex.Store({
     createAnswer (context, data) {
       axios({
         method: 'post',
-        url: `http://localhost:3000/answers`,
+        url: `http://35.240.190.67/answers`,
         headers: {
           token: localStorage.getItem('token')
         },
@@ -236,7 +236,7 @@ export default new Vuex.Store({
     getAllAnswer (context, data) {
       axios({
         method: 'get',
-        url: `http://localhost:3000/answers/${data}`,
+        url: `http://35.240.190.67/answers/${data}`,
       })
         .then((result) => {
           context.commit('setAnswer', result.data.data)
