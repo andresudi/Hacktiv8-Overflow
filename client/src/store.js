@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import swal from 'sweetalert'
 import router from './router'
+import firebase from 'firebase'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -122,7 +123,31 @@ export default new Vuex.Store({
         });
     },
 
+    loginOath2 (context,data) {
+      axios({
+        method: 'post',
+        url: `${this.state.baseUrl}/users/loginoauth2`,
+        data: data
+      })
+        .then((result) => {
+          console.log('ini result login ===>', result);
+          localStorage.setItem('token', result.data.token)
+          localStorage.setItem('email', result.data.email)
+          context.commit('setToken', localStorage.getItem('token'))
+          context.commit('setUserLogin',result.data.email)
+          router.push('/')
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+          context.commit('setErrorMessage', err.response.data.message)
+          setInterval(function () {
+            context.commit('setErrorMessage', '')
+          }, 3000)
+        });
+    },
+
     logout(context,data) {
+      firebase.auth().signOut();
       localStorage.removeItem('token')
       localStorage.removeItem('name')
       localStorage.removeItem('email')

@@ -9,8 +9,11 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "firebase": "^5.5.1",
+    "firebaseui": "^3.4.1",
     "sweetalert": "^2.1.0",
     "vue": "^2.5.17",
+    "vue-google-signin-button": "^1.0.2",
     "vue-moment": "^4.0.0",
     "vue-router": "^3.0.1",
     "vue-wysiwyg": "^1.7.2",
