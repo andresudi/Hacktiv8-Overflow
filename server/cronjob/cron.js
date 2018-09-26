@@ -3,7 +3,7 @@ const User = require('../models/user')
 var nodemailer = require('nodemailer')
 
 function cron (){
-  new CronJob('11 10 11 * * 5', function() {
+  new CronJob('11 11 11 * * 5', function() {
     User.find({})
     .then(users => {
 
