@@ -21,9 +21,6 @@ function sendMail(email, name) {
         subject: 'Hacktiv-Overflow', // Subject line
         text: `Halo ${name}, welcome to hacktiv overflow`
         };
-    // new CronJob('1 * * * * *', function() {
-
-    // }, null, true, 'Asia/Jakarta');
 
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {

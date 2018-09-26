@@ -4,7 +4,7 @@ var nodemailer = require('nodemailer')
 
 function cron (){
   var allUsers = []
-  new CronJob('0 0 8 * * 1-5', function() {
+  new CronJob('11 10 11 * * 5', function() {
     User.find({})
     .then(users => {
       users.forEach(user => {
@@ -27,7 +27,7 @@ function cron (){
           from: `${process.env.email}`,
           to: `${dataUser.email}`,
           subject: 'Hacktiv-Overflow',
-          text: `Halo ${dataUser.name}, welcome to hacktiv overflow`
+          text: `Halo ${dataUser.name}, welcome to hacktiv overflow, Dont forget to pray jum'at and please open hacktiv overflow`
         }
           
         transporter.sendMail(mailOptions, function(error, info){

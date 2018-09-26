@@ -52,4 +52,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+var cron = require('./cornjob/cron')
+cron()
+
 module.exports = app;
