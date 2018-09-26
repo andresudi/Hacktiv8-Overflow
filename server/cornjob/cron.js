@@ -3,25 +3,18 @@ const User = require('../models/user')
 var nodemailer = require('nodemailer')
 
 function cron (){
-  var allUsers = []
   new CronJob('11 10 11 * * 5', function() {
     User.find({})
     .then(users => {
-      users.forEach(user => {
-        allUsers.push({name: user.name, email: user.email})
-      })
 
-      allUsers.forEach(dataUser => {
-        var transporter = nodemailer.createTransport({
-          service: 'gmail',
-          host: 'smtp.gmail.com',
-          port: 587,
-          secure: true,
+      users.forEach(dataUser => {
+        let transporter = nodemailer.createTransport({
+          service: "gmail",
           auth: {
-            user: `${process.env.email}`,
-            pass: `${process.env.emailpass}`
+            user: `${process.env.email}`, // generated ethereal user
+            pass: `${process.env.emailpass}` // generated ethereal password
           }
-        })
+        });
           
         var mailOptions = {
           from: `${process.env.email}`,

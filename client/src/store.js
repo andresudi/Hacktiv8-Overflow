@@ -17,7 +17,7 @@ export default new Vuex.Store({
     token: '',
     user_login: '',
     created: '',
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'https://overflow-hacktiv.andresudi.club',
     errorMessage : '',
     notif: ''
   },

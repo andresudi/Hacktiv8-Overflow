@@ -2,9 +2,6 @@ var CronJob = require('cron').CronJob
 const nodemailer = require('nodemailer');
 
 function sendMail(email, name) {
-    console.log(email);
-    console.log(name);
-    console.log('masuuuk');
     
   nodemailer.createTestAccount((err, account) => {
     let transporter = nodemailer.createTransport({
