@@ -174,9 +174,70 @@ const loginfb = (req, res) => {
     });
 };
 
+const loginOath2 = (req, res) => {
+  // 1 untuk semua login yang di firebase
+  User.findOne({email: req.body.email})
+  
+  .then(dataUser => {
+    
+    if (!dataUser) {
+      User.create({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.email
+      })
+        .then(newUser => {
+
+          let token = jwt.sign(
+            {
+              id: newUser.id,
+              name: newUser.name,
+              email: newUser.email
+            },
+            process.env.jwt_secret
+          );
+          res.status(200).json({
+            message: `succesfully registered`,
+            token: token,
+            name: newUser.name,
+            email: newUser.email
+          });
+        })
+        .catch(err => {
+          res.status(400).json({
+            message: err.message
+          });
+        });
+    } else {
+      let token = jwt.sign(
+        {
+          id: dataUser.id,
+          name: dataUser.name,
+          email: dataUser.email
+        },
+        process.env.jwt_secret
+      );
+
+      res.status(200).json({
+        message: `login succesfully`,
+        token: token,
+        name: dataUser.name,
+        email: dataUser.email
+      });
+    }
+  })
+  .catch(err => {
+    res.status(400).json({
+      err
+    });
+  });
+}
+
+
 module.exports = {
   getAllUser,
   register,
   login,
-  loginfb
+  loginfb,
+  loginOath2
 };

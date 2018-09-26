@@ -26,7 +26,7 @@ function cron (){
         var mailOptions = {
           from: `${process.env.email}`,
           to: `${dataUser.email}`,
-          subject: 'Hacktiv-Overflow Setia Anggraeni',
+          subject: 'Hacktiv-Overflow',
           text: `Halo ${dataUser.name}, welcome to hacktiv overflow`
         }
           
