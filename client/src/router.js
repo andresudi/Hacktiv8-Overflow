@@ -31,7 +31,7 @@ export default new Router({
         { path: '/forum', component: () => import('./components/AddQuestion.vue') },
         { path: '/forum/question/:id', component: () => import('./components/DetailQuestion.vue') },
         { path: '/forum/question/update/:id', component: () => import('./components/EditQuestion.vue') },
-        { path: '/forum/answer/:id', component: () => import('./components/UpdateAnswer.vue') }
+        { path: '/forum/answer/:question/:id', component: () => import('./components/UpdateAnswer.vue') }
       ]
     }
   ]

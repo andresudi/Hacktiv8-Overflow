@@ -19,7 +19,7 @@ const createAnswer = (req, res) => {
     })
     .catch(err => {
       res.status(400).json({
-        message: `Internal Server Error!`
+        message: `Please input your answer!`
       });
     });
 };
@@ -32,9 +32,8 @@ const getAllAnswerInQuestion = (req, res) => {
   })
     .populate("userId")
     .populate("questionId")
+    .sort({createdAt: 'asc'})
     .then(result => {
-        console.log(result);
-        
       res.status(200).json({
         message: `Success get All Answer with questionId ${req.params.question}`,
         data: result
@@ -72,7 +71,8 @@ const updateAnswer = (req, res) => {
   let token = req.headers.token;
   let loggedInUser = req.loggedInUser
   Answer.findOne({
-    _id: req.params.id
+    _id: req.params.id,
+    
   })
     .then(result => {
       if (result) {
@@ -97,12 +97,12 @@ const updateAnswer = (req, res) => {
               });
             });
         } else {
-          res.status(200).json({
+          res.status(400).json({
             message: `You cannott edit other user's answer!`
           });
         }
       } else {
-        res.status(200).json({
+        res.status(400).json({
           message: `Data Not Found!`
         });
       }
@@ -134,7 +134,7 @@ const likeAnswer = (req, res) => {
             }
           }
           if (status == true) {
-            res.status(200).json({
+            res.status(400).json({
               message: `You already like this answer!`
             });
           } else {
@@ -192,7 +192,7 @@ const dislikeAnswer = (req, res) => {
             }
           }
           if (status == true) {
-            res.status(200).json({
+            res.status(400).json({
               message: `You already disllike this answer!`
             });
           } else {

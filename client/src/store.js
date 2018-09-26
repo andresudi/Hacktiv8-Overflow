@@ -79,11 +79,13 @@ export default new Vuex.Store({
         }
       })
         .then((result) => {
-          swal({
-            type: 'success',
-            title: result.data.message,
-          })
-          router.push('/login')
+          context.commit('setNotif', result.data.message)
+          setInterval(function () {
+            context.commit('setNotif', '')
+          }, 3000)
+          setTimeout(() => {
+            router.push('/login')
+          }, 3000);
         })
         .catch((err) => {    
           context.commit('setErrorMessage', err.response.data.message)
@@ -103,9 +105,10 @@ export default new Vuex.Store({
         }
       })
         .then((result) => {
+          console.log('ini result login ===>', result);
           swal(result.data.message, '', 'success')
           localStorage.setItem('token', result.data.token)
-          localStorage.setItem('name', result.data.name)
+          localStorage.setItem('email', result.data.email)
           context.commit('setToken', localStorage.getItem('token'))
           context.commit('setUserLogin',result.data.email)
           router.push('/')
@@ -121,7 +124,10 @@ export default new Vuex.Store({
 
     logout(context,data) {
       localStorage.removeItem('token')
+      localStorage.removeItem('name')
+      localStorage.removeItem('email')
       context.commit('setToken', '')
+      context.commit('setUserLogin', '')
       router.push('/')
     },
 
@@ -230,26 +236,32 @@ export default new Vuex.Store({
     },
 
     createAnswer (context, data) {
+      // console.log('====>>> data question',data.question);
       axios({
         method: 'post',
-        url: `${this.state.baseUrl}/answers`,
+        url: `${this.state.baseUrl}/answers/${data.question}`,
         headers: {
           token: localStorage.getItem('token')
         },
         data: {
           answer: data.answer,
-          questionId: data.questionId,
         }
       })
         .then((result) => {
           console.log(result);
         })
         .catch((err) => {
-          
+          console.log(err);
+          context.commit('setErrorMessage', err.response.data.message)
+          setInterval(function () {
+            context.commit('setErrorMessage', '')
+          }, 3000)
         });
     },
 
     getAllAnswer (context, data) {
+      // console.log('====> all answer',data);
+      
       axios({
         method: 'get',
         url: `${this.state.baseUrl}/answers/${data}`,

@@ -1,22 +1,23 @@
 <template>
     <v-container>
-        <v-jumbotron class="jumbo">
-            <v-container fill-height>
-                <v-layout align-center>
-                    <v-flex>
-                        <h3 class="display-1">Edit Answer</h3>
-                        <br>
+        <v-container fill-height>
+            <v-layout align-center>
+                <v-flex>
+                    <h3 class="display-1">Edit Answer</h3>
+                    <br>
     
-                        <br>
-                        <wysiwyg v-model="answer" />
+                    <br>
+                    <wysiwyg v-model="answer" />
     
-                        <v-btn class="mx-0" color="black" @click="updateAnswer">
-                            Submit
-                        </v-btn>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        </v-jumbotron>
+                    <v-btn class="mx-0" color="green" style="color: white; " @click="updateAnswer">
+                        Submit
+                    </v-btn>
+                     <v-btn class="mx-0" color="red" style="color: white;;" :to="`/forum/question/${idQ}`">
+                        Back
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+        </v-container>
     </v-container>
 </template>
 
@@ -27,7 +28,9 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      answer: ""
+      answer: "",
+      idQ: '',
+      idA: ''
     };
   },
   computed: {
@@ -44,12 +47,13 @@ export default {
           token: localStorage.getItem("token")
         },
         data: {
-          answer: this.answer
+          answer: this.answer,
+          
         }
       })
         .then(result => {
-          swal(result.data.message);
-          this.$router.push("/forum");
+          console.log("das ist result von updateAnswre", result);
+          this.$router.push(`/forum/question/${this.idQ}`);
         })
         .catch(err => {});
     }
@@ -66,7 +70,11 @@ export default {
         this.answer = result.data.data.answer;
       })
       .catch(err => {});
-  }
+  }, 
+    created() {
+        this.idQ = this.$route.params.question
+        this.idA = this.$route.params.id
+    }
 };
 </script>
 

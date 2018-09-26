@@ -9,13 +9,16 @@
                 <h4>Already Have an Account?
                     <router-link to="/login">Login here</router-link>
                 </h4>
-                <v-btn color="blue" @click="registerUser">submit</v-btn>
+                <v-btn class="mx-0 indigo darken-3" style="color: white;" @click="registerUser">submit</v-btn>
             </v-form>
         </v-card>
         <br>
         <div>
             <v-alert v-if="errorMessage" :value="true" type="error" class="red darken-2">
                 <h4 class="text-md-center">{{errorMessage}}</h4>
+            </v-alert>
+            <v-alert v-if="notif" :value="true" type="success" class="green darken-1">
+                <h4 class="text-md-center">{{notif}}</h4>
             </v-alert>
         </div>
     </v-container>
@@ -59,7 +62,8 @@
         },
         computed: {
             ...mapState({
-                errorMessage: 'errorMessage'
+                errorMessage: 'errorMessage',
+                notif: 'notif'
             })
         }
     }

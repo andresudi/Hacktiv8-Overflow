@@ -191,7 +191,7 @@ const likeQuestion = (req, res) => {
             }
           }
           if (status == true) {
-            res.status(200).json({
+            res.status(400).json({
               message: `You already like this question!`
             });
           } else {
@@ -249,7 +249,7 @@ const dislikeQuestion = (req, res) => {
             }
           }
           if (status == true) {
-            res.status(200).json({
+            res.status(400).json({
               message: `You already disllike this question!`
             });
           } else {

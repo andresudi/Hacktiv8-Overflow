@@ -8,7 +8,7 @@
                 <h4>Don't Have an Account?
                     <router-link to="/register">Register here</router-link>
                 </h4>
-                <v-btn color="blue" @click="loginUser">Submit</v-btn>
+                <v-btn class="mx-0 indigo darken-3" style="color: white;" @click="loginUser">Submit</v-btn>
             </v-form>
         </v-card>
         <br>

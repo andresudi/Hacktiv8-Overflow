@@ -16,7 +16,7 @@
                             <div v-else>
                                 <p class="margin-left: 500px;"> Posted on {{ data.createdAt | moment("dddd, MMMM Do YYYY, h:mm a")}} by Anonymous</p>
                             </div>
-                            <h4 v-html="data.description"> {{ data.description }} </h4>
+                            <h3 v-html="data.description"> {{ data.description }} </h3>
                         </div>
                     </v-card-title>
     
@@ -31,7 +31,7 @@
                                 <v-icon dark right>build</v-icon>
                             </v-btn>
                         </router-link>
-                        <v-btn left color="red" class="bg" @click="remove(data._id)">Delete</v-btn>
+                        <v-btn left class="deep-orange accent-4" @click="remove(data._id)">Delete</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>

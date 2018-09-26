@@ -40,7 +40,7 @@ const register = (req, res) => {
         })
           .then(data => {
             res.status(200).json({
-              message: `Success add new user`,
+              message: `Welcome new user!`,
               data
             });
           })
@@ -80,10 +80,10 @@ const login = (req, res) => {
             process.env.jwt_secret
           );
           res.status(200).json({
-            message: `Successfully login`,
+            message: `Welcome to Hacktiv Overflow!`,
             token: token,
             token2: token + ',' + data._id,
-            name: data.name
+            email: data.email
           });
         } else {
           res.status(400).json({
